@@ -1,6 +1,318 @@
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-<input id="username" placeholder="Username">
-<button onclick="signup()">Signup</button>
-
-<script type="module" src="js/auth.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - ChatApp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .logo i {
+            font-size: 40px;
+            color: #667eea;
+        }
+        
+        .logo h1 {
+            font-size: 32px;
+            color: #333;
+        }
+        
+        h2 {
+            text-align: center;
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .links {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+        }
+        
+        .links a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .links a:hover {
+            text-decoration: underline;
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .message.error {
+            background: #fee;
+            color: #c33;
+            border: 1px solid #fcc;
+        }
+        
+        .message.success {
+            background: #efe;
+            color: #393;
+            border: 1px solid #cfc;
+        }
+        
+        .password-strength {
+            margin-top: 5px;
+            height: 4px;
+            background: #ddd;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .strength-meter {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+        }
+        
+        .strength-weak { background: #ff4757; width: 25%; }
+        .strength-fair { background: #ffa502; width: 50%; }
+        .strength-good { background: #2ed573; width: 75%; }
+        .strength-strong { background: #2ed573; width: 100%; }
+        
+        .password-hint {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-comments"></i>
+            <h1>ChatApp</h1>
+        </div>
+        
+        <h2>Create Account</h2>
+        
+        <div id="message" class="message"></div>
+        
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="username" name="username" required placeholder="Choose a username">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="full_name">Full Name</label>
+                <div class="input-group">
+                    <i class="fas fa-user-circle"></i>
+                    <input type="text" id="full_name" name="full_name" required placeholder="Enter your full name">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" name="password" required 
+                           placeholder="Create a strong password"
+                           oninput="checkPasswordStrength(this.value)">
+                </div>
+                <div class="password-strength">
+                    <div id="strengthMeter" class="strength-meter"></div>
+                </div>
+                <div class="password-hint">
+                    Must be at least 8 characters with uppercase, lowercase, and numbers
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required 
+                           placeholder="Confirm your password">
+                </div>
+            </div>
+            
+            <button type="submit" class="btn">
+                <i class="fas fa-user-plus"></i>
+                Create Account
+            </button>
+        </form>
+        
+        <div class="links">
+            <p>Already have an account? <a href="login.html">Login here</a></p>
+            <p><a href="index.html">Back to Home</a></p>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { supabase } from './js/supabase.js';
+        import { signup } from './js/auth.js';
+        
+        function checkPasswordStrength(password) {
+            const meter = document.getElementById('strengthMeter');
+            let strength = 0;
+            
+            if (password.length >= 8) strength += 25;
+            if (/[A-Z]/.test(password)) strength += 25;
+            if (/[a-z]/.test(password)) strength += 25;
+            if (/[0-9]/.test(password)) strength += 25;
+            
+            meter.className = 'strength-meter';
+            if (strength <= 25) meter.classList.add('strength-weak');
+            else if (strength <= 50) meter.classList.add('strength-fair');
+            else if (strength <= 75) meter.classList.add('strength-good');
+            else meter.classList.add('strength-strong');
+        }
+        
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const full_name = document.getElementById('full_name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const messageDiv = document.getElementById('message');
+            
+            messageDiv.style.display = 'none';
+            
+            // Validation
+            if (password !== confirmPassword) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Passwords do not match!';
+                messageDiv.style.display = 'block';
+                return;
+            }
+            
+            if (password.length < 8) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Password must be at least 8 characters long!';
+                messageDiv.style.display = 'block';
+                return;
+            }
+            
+            try {
+                await signup(email, password, username, full_name);
+                messageDiv.className = 'message success';
+                messageDiv.textContent = 'Account created successfully! Redirecting to login...';
+                messageDiv.style.display = 'block';
+                
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            } catch (error) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = error.message;
+                messageDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
